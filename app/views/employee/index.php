@@ -47,10 +47,11 @@
                                     <div class="card-body">
                                       <div class="row mb-2">
                                           <!-- SignIn modal content -->
-                                          <div id="add-employee" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                          <div id="modal-form-employee" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
                                                   <div class="modal-content">
-                                                    <form class="needs-validation" action="<?= BASEURL; ?>/employee/create" method="post">
+                                                    <form class="needs-validation form-employee" action="<?= BASEURL; ?>/employee/create" method="post">
+                                                      <input type="hidden" name="id" id="id" >
 
                                                       <div class="modal-header">
                                                           <h4 class="modal-title" id="standard-modalLabel">Tambah karyawan</h4>
@@ -186,14 +187,14 @@
                                                           <div class="row">
                                                             <div class="col-md-6">
                                                               <label class="form-label" for="validationNoID">Nomor ID</label>
-                                                              <input type="text" class="form-control" id="validationNoID" name="id" placeholder="Nomor ID" value="" required>
+                                                              <input type="text" class="form-control" id="validationNoID" name="employee_id" placeholder="Nomor ID" value="" required>
                                                               <div class="invalid-feedback">
                                                                 Field ini tidak valid.
                                                               </div>
                                                             </div>
                                                             <div class="col-md-6 position-relative">
-                                                              <label class="form-label" for="validationDate">Tanggal Bergabung</label>
-                                                              <input type="text" class="form-control" placeholder="Tanggal bergabung" id="validationDate" name="join_date" data-provide="datepicker" data-date-container="#datepicker2">
+                                                              <label class="form-label" for="validationJoinDate" id="datepicker2">Tanggal Bergabung</label>
+                                                              <input type="text" class="form-control" placeholder="Tanggal bergabung" id="validationJoinDate" name="join_date" data-provide="datepicker" data-date-container="#datepicker2">
                                                               <div class="invalid-feedback">
                                                                 Field ini tidak valid.
                                                               </div>
@@ -238,7 +239,7 @@
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
                                           <div class="col-sm-4">
-                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-employee"><i class="mdi mdi-plus-circle me-2"></i>Tambah Karyawan</a>
+                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-form-employee"><i class="mdi mdi-plus-circle me-2"></i>Tambah Karyawan</a>
                                           </div>
                                           <div class="col-sm-8">
                                               <div class="text-sm-end">
@@ -249,7 +250,7 @@
                                           </div><!-- end col-->
                                       </div>
                                                            
-                                      <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                      <table id="alternative-page-datatable" class="table dt-responsive nowrap w-100">
                                           <thead>
                                               <tr>
                                                   <th>ID</th>
@@ -272,7 +273,13 @@
                                                 <td><?= $data['employees'][$usr]['job_level'] ?></td>
                                                 <td>
                                                   <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                                  <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                  <a 
+                                                    class="action-icon modalUbahEmployee" 
+                                                    role="button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#modal-form-employee"
+                                                    data-id="<?= $data['employees'][$usr]['id']; ?>"
+                                                  > <i class="mdi mdi-square-edit-outline"></i></a>
                                                   <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
                                                 </td>
                                               </tr>
@@ -313,17 +320,10 @@
         <script src="<?= BASEURL; ?>/assets/js/vendor/dataTables.bootstrap5.js"></script>
         <script src="<?= BASEURL; ?>/assets/js/vendor/dataTables.responsive.min.js"></script>
         <script src="<?= BASEURL; ?>/assets/js/vendor/responsive.bootstrap5.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/dataTables.buttons.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/buttons.bootstrap5.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/buttons.html5.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/buttons.flash.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/buttons.print.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/dataTables.keyTable.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/vendor/dataTables.select.min.js"></script>
         <!-- third party js ends -->
 
         <!-- demo app -->
-        <script src="<?= BASEURL; ?>/assets/js/pages/demo.datatable-init.js"></script>
+        <script src="<?= BASEURL; ?>/assets/js/custom.js"></script>
         <!-- end demo js-->
 
     </body>

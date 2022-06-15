@@ -20,8 +20,4 @@ class User_model {
 
     return $users;
   }
-
-  public function getUser() {
-    return $this->name;
-  }
 }

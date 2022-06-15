@@ -24,4 +24,23 @@
         exit;
       }
     }
+    
+    public function edit() {
+      Utils::PrivatePage();
+      $result = $this->model('Employee_model')->edit($_POST);
+
+      if ($result['count'] > 0) {
+        Flasher::setFlash('berhasil', 'diedit', 'success', 'Karyawan');
+        header('Location: ' . BASEURL . '/employee');
+        exit;
+      } else {
+        Flasher::setFlash('gagal', 'diedit', 'danger', 'Karyawan');
+        header('Location: ' . BASEURL . '/employee');
+        exit;
+      }
+    }
+
+    public function getdetail() {
+      echo json_encode($this->model('Employee_model')->getUserById($_POST['id']));
+    }
   }
