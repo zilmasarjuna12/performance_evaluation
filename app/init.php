@@ -1,6 +1,7 @@
 <?php
 
 require_once 'core/Utils.php';
+require_once 'core/Svm.php';
 require_once 'core/Menu.php';
 require_once 'core/App.php';
 require_once 'core/Controller.php';

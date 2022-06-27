@@ -40,6 +40,7 @@ $(document).ready(function() {
         $("#id").val(data.id);
       }
     });
-
   })
+
+  
 })

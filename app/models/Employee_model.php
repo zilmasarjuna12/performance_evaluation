@@ -147,6 +147,7 @@ class Employee_model {
 
     return $result;
   }
+
   private function randomPassword() {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = array(); //remember to declare $pass as an array

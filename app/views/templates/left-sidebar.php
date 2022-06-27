@@ -43,7 +43,7 @@
             <li class="side-nav-item">
                 <a href="<?= BASEURL; ?>/user" class="side-nav-link">
                     <i class="uil-accessible-icon-alt"></i>
-                    <span> User </span>
+                    <span> Pengguna </span>
                 </a>
             </li>
         </ul>
