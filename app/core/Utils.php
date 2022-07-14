@@ -8,11 +8,15 @@
     }
 
     public static function GetUserId() {
-      return $_SESSION['user_id'];
+      return $_SESSION['user']['id'];
     }
 
     public static function GetUser() {
       return $_SESSION['user'];
+    }
+
+    public static function GetRole() {
+      return $_SESSION['user']['role'];
     }
 
     public static function GetUserName() {

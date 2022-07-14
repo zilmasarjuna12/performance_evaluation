@@ -48,62 +48,60 @@
                                       <div class="row mb-2">
                                           <!-- SignIn modal content -->
                                           <div id="modal-form-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                              <div class="modal-dialog modal-lg">
+                                              <div class="modal-dialog modal-sm">
                                                   <div class="modal-content">
-                                                    <?php $this->view('user/create', $data) ?>
-                                                  </div><!-- /.modal-content -->
-                                              </div><!-- /.modal-dialog -->
-                                          </div><!-- /.modal -->
-
-                                          <div id="modal-form-edit-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                              <div class="modal-dialog modal-lg">
-                                                  <div class="modal-content">
-                                                    <?php $this->view('user/edit', $data) ?>
+                                                    <?php $this->view('periode/create', $data) ?>
                                                   </div><!-- /.modal-content -->
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
                                       
                                           <div class="col-sm-4">
-                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-form-user"><i class="mdi mdi-plus-circle me-2"></i>Tambah Pengguna</a>
+                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-form-user"><i class="mdi mdi-plus-circle me-2"></i>Tambah periode penilaian</a>
                                           </div>
-                                          <div class="col-sm-8">
-                                              <div class="text-sm-end">
-                                                  <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                                                  <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                                  <button type="button" class="btn btn-light mb-2">Export</button>
-                                              </div>
-                                          </div><!-- end col-->
                                       </div>
                                                            
                                       <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                           <thead>
                                               <tr>
                                                   <th>ID</th>
-                                                  <th>Email</th>
                                                   <th>Name</th>
-                                                  <th>Pekerjaan</th>
-                                                  <th>Role</th>
+                                                  <th>Status</th>
                                                   <th>Action</th>
                                               </tr>
                                           </thead>
                                       
                                       
                                           <tbody>
-                                            <?php foreach($data['users'] as $usr => $index) : ?>
+                                            <?php foreach($data['periodes'] as $usr => $index) : ?>
                                               <tr>
-                                                <td><?= $data['users'][$usr]['user_id'] ?></td>
-                                                <td><?= $data['users'][$usr]['email'] ?></td>
-                                                <td><?= $data['users'][$usr]['fullname'] ?></td>
-                                                <td><?= $data['users'][$usr]['job'] ?></td>
-                                                <td><?= $data['users'][$usr]['role'] ?></td>
+                                                <td><?= $data['periodes'][$usr]['id'] ?></td>
+                                                <td><?= $data['periodes'][$usr]['name'] ?></td>
                                                 <td>
-                                                  <a 
-                                                    class="action-icon modalUbahUser" 
-                                                    role="button" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#modal-form-edit-user"
-                                                    data-id="<?= $data['users'][$usr]['user_id']; ?>"
-                                                  > <i class="mdi mdi-square-edit-outline"></i></a>
+                                                  <?php if ($data['periodes'][$usr]['is_active'] == 1 && $data['periodes'][$usr]['is_published'] == 0): ?>
+                                                    <i class="mdi mdi-circle text-info"></i> Sedang berlangsung
+                                                  <?php elseif($data['periodes'][$usr]['is_active'] == 0 && $data['periodes'][$usr]['is_published'] == 0): ?>
+                                                    <i class="mdi mdi-circle text-danger"></i> Tidak aktif
+                                                  <?php elseif($data['periodes'][$usr]['is_active'] == 1 && $data['periodes'][$usr]['is_published'] == 1): ?>
+                                                    <i class="mdi mdi-circle text-success"></i> Sudah diarsipkan
+                                                  <?php endif ?>
+                                                </td>
+                                                <td>
+                                                  <?php if ($data['periodes'][$usr]['is_active'] == 1 && $data['periodes'][$usr]['is_published'] == 0): ?>
+                                                    <a 
+                                                      class="btn btn-success btn-sm" 
+                                                      href="<?= BASEURL; ?>/periode/publish/<?= $data['periodes'][$usr]['id'] ?>"
+                                                    > 
+                                                      Terbitkan
+                                                    </a>
+                                                  <?php elseif($data['periodes'][$usr]['is_active'] == 0 && $data['periodes'][$usr]['is_published'] == 0): ?>
+                                                    <a 
+                                                      class="btn btn-info btn-sm" 
+                                                      href="<?= BASEURL; ?>/periode/start/<?= $data['periodes'][$usr]['id'] ?>"
+                                                    > 
+                                                      Mulai
+                                                    </a>
+                                                  <?php elseif($data['periodes'][$usr]['is_active'] == 1 && $data['periodes'][$usr]['is_published'] == 1): ?>
+                                                  <?php endif ?>
                                                 </td>
                                               </tr>
                                             <?php endforeach; ?>

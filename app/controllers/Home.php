@@ -7,6 +7,7 @@ class Home extends Controller {
     $data['judul'] = 'Home';
     // $data['nama'] = $this->model('User_model')->getUser();
 
+    echo Utils::GetRole();
     $this->view('home/index', $data);
   }
 }

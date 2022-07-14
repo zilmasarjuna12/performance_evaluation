@@ -10,6 +10,16 @@
       $this->view('employee/index', $data);
     }
 
+    public function penilaian() {
+      Utils::PrivatePage();
+      $data['judul'] = 'Home';
+
+      $data['periode'] = $this->model('Periode_model')->getActive();
+      $data['users'] = $this->model('Penilaian_model')->getAllEmployeeAndPenilaian($data['periode']['id']);
+
+      $this->view('employee/penilaian', $data);
+    }
+
     public function create() {
       Utils::PrivatePage();
       $result = $this->model('Employee_model')->create($_POST);

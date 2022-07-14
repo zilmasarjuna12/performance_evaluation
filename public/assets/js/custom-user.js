@@ -1,9 +1,9 @@
 $(document).ready(function() {
 
   $('.modalUbahUser').on('click', function() {
-    console.log("run")
 
     var id = $(this).data('id');
+    console.log("runs", id)
 
     $.ajax({
       url: 'http://localhost/mvc/public/user/getdetail',
@@ -13,8 +13,11 @@ $(document).ready(function() {
       method: 'post',
       dataType: 'json',
       success: function(data) {
-        $("#validationEmail").val(data.email);
-        $("#validationRole").val(data.role);;
+        $("#validationFullnameEdit").val(data.fullname);
+        $("#validationEmailEdit").val(data.email);
+        $("#validationJobPositionEdit").val(data.job_position_id);
+        $("#validationRoleEdit").val(data.role);
+
         $("#id").val(data.id);
       }
     });

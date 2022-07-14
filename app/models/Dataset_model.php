@@ -8,7 +8,7 @@
 
     public function getOut($target) {
       $query = 'SELECT * from dataset
-        where naik_gaji = :target
+        where penilaian = :target
       ';
 
       $this->db->query($query);
@@ -20,7 +20,7 @@
     }
 
     public function getKK($column, $value, $target) {
-      $query = "SELECT * from dataset where `$column`=:value and naik_gaji=:target";
+      $query = "SELECT * from dataset where `$column`=:value and penilaian=:target";
 
       $this->db->query($query);
       $this->db->bind('target', $target);

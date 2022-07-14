@@ -33,7 +33,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Pengguna</h4>
+                                    <h4 class="page-title">Penilaian karyawan</h4>
                                 </div>
                             </div>
                         </div>     
@@ -47,43 +47,27 @@
                                     <div class="card-body">
                                       <div class="row mb-2">
                                           <!-- SignIn modal content -->
-                                          <div id="modal-form-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                          <div id="modal-form-penilaian" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
+                                                  
                                                   <div class="modal-content">
-                                                    <?php $this->view('user/create', $data) ?>
+                                                    <?php $this->view('penilaian/edit') ?>
                                                   </div><!-- /.modal-content -->
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
-
-                                          <div id="modal-form-edit-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                              <div class="modal-dialog modal-lg">
-                                                  <div class="modal-content">
-                                                    <?php $this->view('user/edit', $data) ?>
-                                                  </div><!-- /.modal-content -->
-                                              </div><!-- /.modal-dialog -->
-                                          </div><!-- /.modal -->
-                                      
-                                          <div class="col-sm-4">
-                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-form-user"><i class="mdi mdi-plus-circle me-2"></i>Tambah Pengguna</a>
-                                          </div>
-                                          <div class="col-sm-8">
-                                              <div class="text-sm-end">
-                                                  <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                                                  <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                                  <button type="button" class="btn btn-light mb-2">Export</button>
-                                              </div>
-                                          </div><!-- end col-->
                                       </div>
                                                            
-                                      <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                      <table id="basic-datatable" class="table dt-responsive nowrap w-100 table-centered">
                                           <thead>
                                               <tr>
                                                   <th>ID</th>
                                                   <th>Email</th>
                                                   <th>Name</th>
                                                   <th>Pekerjaan</th>
-                                                  <th>Role</th>
-                                                  <th>Action</th>
+                                                  <th>Process</th>
+                                                  <th>Status</th>
+                                                  <th>Naik gaji</th>
+                                                  <th>Klasifikasi</th>
                                               </tr>
                                           </thead>
                                       
@@ -95,16 +79,20 @@
                                                 <td><?= $data['users'][$usr]['email'] ?></td>
                                                 <td><?= $data['users'][$usr]['fullname'] ?></td>
                                                 <td><?= $data['users'][$usr]['job'] ?></td>
-                                                <td><?= $data['users'][$usr]['role'] ?></td>
                                                 <td>
-                                                  <a 
-                                                    class="action-icon modalUbahUser" 
-                                                    role="button" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#modal-form-edit-user"
-                                                    data-id="<?= $data['users'][$usr]['user_id']; ?>"
-                                                  > <i class="mdi mdi-square-edit-outline"></i></a>
+                                                  <div class="progress progress-sm">
+                                                    <?php if ($data['users'][$usr]['periode_id'] == '' && $data['users'][$usr]['approved_by'] == '') echo '<div class="progress-bar progress-lg bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>' ?>
+                                                    <?php if ($data['users'][$usr]['periode_id'] != '' && $data['users'][$usr]['approved_by'] == '') echo '<div class="progress-bar progress-lg bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>' ?>
+                                                    <?php if ($data['users'][$usr]['periode_id'] != '' && $data['users'][$usr]['approved_by'] != '') echo '<div class="progress-bar progress-lg bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>' ?>
+                                                  </div>
                                                 </td>
+                                                <td>
+                                                  <?php if ($data['users'][$usr]['periode_id'] == '' && $data['users'][$usr]['approved_by'] == '') echo '<i class="mdi mdi-circle text-danger"></i> Perlu diisi karyawan' ?>
+                                                  <?php if ($data['users'][$usr]['periode_id'] != '' && $data['users'][$usr]['approved_by'] == '') echo '<i class="mdi mdi-circle text-warning"></i> Perlu persetujuan leader' ?>
+                                                  <?php if ($data['users'][$usr]['periode_id'] != '' && $data['users'][$usr]['approved_by'] != '') echo '<i class="mdi mdi-circle text-info"></i> Selesai' ?>
+                                                </td>
+                                                <td><?= $data['users'][$usr]['naik_gaji'] ?></td>
+                                                <td><?= $data['users'][$usr]['classification'] ?></td>
                                               </tr>
                                             <?php endforeach; ?>
                                           </tbody>
@@ -137,7 +125,6 @@
         <!-- bundle -->
         <script src="<?= BASEURL; ?>/assets/js/vendor.min.js"></script>
         <script src="<?= BASEURL; ?>/assets/js/app.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/custom-user.js"></script>
 
         <!-- third party js -->
         <script src="<?= BASEURL; ?>/assets/js/vendor/jquery.dataTables.min.js"></script>

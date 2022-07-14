@@ -33,7 +33,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Pengguna</h4>
+                                    <h4 class="page-title">Hasil penilaian</h4>
                                 </div>
                             </div>
                         </div>     
@@ -46,64 +46,60 @@
                                 <div class="card">
                                     <div class="card-body">
                                       <div class="row mb-2">
-                                          <!-- SignIn modal content -->
-                                          <div id="modal-form-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                          <!-- StartModal modal content -->
+                                          <div id="modal-show-penilaian" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
+                                                  
                                                   <div class="modal-content">
-                                                    <?php $this->view('user/create', $data) ?>
+                                                    <?php $this->view('penilaian/detailhasil') ?>
                                                   </div><!-- /.modal-content -->
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
 
-                                          <div id="modal-form-edit-user" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                          <!-- EditModal modal content -->
+                                          <div id="modal-form-edit-penilaian" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
                                                   <div class="modal-content">
-                                                    <?php $this->view('user/edit', $data) ?>
+                                                    <?php $this->view('penilaian/edit') ?>
                                                   </div><!-- /.modal-content -->
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
-                                      
-                                          <div class="col-sm-4">
-                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-form-user"><i class="mdi mdi-plus-circle me-2"></i>Tambah Pengguna</a>
-                                          </div>
-                                          <div class="col-sm-8">
-                                              <div class="text-sm-end">
-                                                  <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                                                  <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                                                  <button type="button" class="btn btn-light mb-2">Export</button>
-                                              </div>
-                                          </div><!-- end col-->
                                       </div>
                                                            
-                                      <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                      <table id="basic-datatable" class="table dt-responsive nowrap w-100 table-centered">
                                           <thead>
                                               <tr>
                                                   <th>ID</th>
-                                                  <th>Email</th>
-                                                  <th>Name</th>
-                                                  <th>Pekerjaan</th>
-                                                  <th>Role</th>
+                                                  <th>Tahun</th>
                                                   <th>Action</th>
                                               </tr>
                                           </thead>
                                       
                                       
                                           <tbody>
-                                            <?php foreach($data['users'] as $usr => $index) : ?>
+                                            <?php foreach($data['periodes_penilaian'] as $usr => $index) : ?>
                                               <tr>
-                                                <td><?= $data['users'][$usr]['user_id'] ?></td>
-                                                <td><?= $data['users'][$usr]['email'] ?></td>
-                                                <td><?= $data['users'][$usr]['fullname'] ?></td>
-                                                <td><?= $data['users'][$usr]['job'] ?></td>
-                                                <td><?= $data['users'][$usr]['role'] ?></td>
+                                                <td><?= $data['periodes_penilaian'][$usr]['periode']['id'] ?></td>
+                                                <td><?= $data['periodes_penilaian'][$usr]['periode']['name'] ?></td>
                                                 <td>
-                                                  <a 
-                                                    class="action-icon modalUbahUser" 
-                                                    role="button" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#modal-form-edit-user"
-                                                    data-id="<?= $data['users'][$usr]['user_id']; ?>"
-                                                  > <i class="mdi mdi-square-edit-outline"></i></a>
+
+                                                    <?php if($data['periodes_penilaian'][$usr]['penilaian'] == ""): ?>
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-info btn-sm modalStartPenilaian"
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#modal-form-start-penilaian"
+                                                            data-periodeId="<?= $data['periodes_penilaian'][$usr]['periode']['id']; ?>"
+                                                        >Mulai</button>
+                                                    <?php else: ?>
+                                                        <a 
+                                                        class="action-icon modalShowPenilaian" 
+                                                        role="button" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#modal-show-penilaian"
+                                                        data-id="<?= $data['periodes_penilaian'][$usr]['penilaian']['id']; ?>"
+                                                        > <i class="mdi mdi-eye"></i></a>
+                                                    <?php endif ?>
                                                 </td>
                                               </tr>
                                             <?php endforeach; ?>
@@ -137,7 +133,7 @@
         <!-- bundle -->
         <script src="<?= BASEURL; ?>/assets/js/vendor.min.js"></script>
         <script src="<?= BASEURL; ?>/assets/js/app.min.js"></script>
-        <script src="<?= BASEURL; ?>/assets/js/custom-user.js"></script>
+        <script src="<?= BASEURL; ?>/assets/js/custom-penilaian.js"></script>
 
         <!-- third party js -->
         <script src="<?= BASEURL; ?>/assets/js/vendor/jquery.dataTables.min.js"></script>

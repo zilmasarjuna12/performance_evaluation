@@ -28,6 +28,8 @@
 
             <li class="side-nav-title side-nav-item">Navigation</li>
 
+            <?php switch(Utils::GetRole()):
+            case "karyawan": ?>
             <li class="side-nav-item">
                 <a href="<?= BASEURL; ?>/home" class="side-nav-link">
                     <i class="uil-home-alt"></i>
@@ -35,17 +37,103 @@
                 </a>
             </li>
             <li class="side-nav-item">
-                <a href="<?= BASEURL; ?>/employee" class="side-nav-link">
-                    <i class="uil-user-circle"></i>
-                    <span> Karyawan </span>
+                <a data-bs-toggle="collapse" href="#sidebarPenilaianKaryawan" aria-expanded="false" aria-controls="sidebarPenilaianKaryawan" class="side-nav-link">
+                    <i class="uil-store"></i>
+                    <span> Penilaian </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPenilaianKaryawan">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="<?= BASEURL; ?>/penilaian/employee">Pending action</a>
+                        </li>
+                        <li>
+                            <a href="<?= BASEURL; ?>/penilaian/hasil">Hasil</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <?php break; ?>
+            <?php case "approval": ?>
+            <li class="side-nav-item">
+                <a href="<?= BASEURL; ?>/home" class="side-nav-link">
+                    <i class="uil-home-alt"></i>
+                    <span> Dashboards </span>
                 </a>
             </li>
             <li class="side-nav-item">
-                <a href="<?= BASEURL; ?>/user" class="side-nav-link">
-                    <i class="uil-accessible-icon-alt"></i>
-                    <span> Pengguna </span>
+                <a data-bs-toggle="collapse" href="#sidebarPenilaianKaryawan" aria-expanded="false" aria-controls="sidebarPenilaianKaryawan" class="side-nav-link">
+                    <i class="uil-store"></i>
+                    <span> Penilaian </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarPenilaianKaryawan">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="<?= BASEURL; ?>/employee/penilaian">Persutujuan</a>
+                        </li>
+                        <li>
+                    </ul>
+                </div>
             </li>
+            <?php break; ?>
+            <?php case "hrd": ?>
+                <li class="side-nav-item">
+                    <a href="<?= BASEURL; ?>/home" class="side-nav-link">
+                        <i class="uil-home-alt"></i>
+                        <span> Dashboards </span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="<?= BASEURL; ?>/user" class="side-nav-link">
+                        <i class="uil-accessible-icon-alt"></i>
+                        <span> Pengguna </span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="<?= BASEURL; ?>/periode" class="side-nav-link">
+                        <i class="uil-accessible-icon-alt"></i>
+                        <span> Periode Penilaian </span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarRekomendasi" aria-expanded="false" aria-controls="sidebarReport" class="side-nav-link">
+                        <i class="uil-store"></i>
+                        <span> Rekomendasi </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarRekomendasi">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a href="<?= BASEURL; ?>/rekomendasi/kenaikangaji">Kenaikan gaji</a>
+                            </li>
+                            <li>
+                                <a href="<?= BASEURL; ?>/rekomendasi/evaluasi">Evaluasi kinerja</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarReport" aria-expanded="false" aria-controls="sidebarReport" class="side-nav-link">
+                        <i class="uil-store"></i>
+                        <span> Report </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarReport">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a href="<?= BASEURL; ?>/report/evaluasi">Evaluasi kinerja</a>
+                            </li>
+                            <li>
+                                <a href="<?= BASEURL; ?>/report/kenaikangaji">Kenaikan gaji</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            <?php break; ?>
+            <?php endswitch; ?>
+
+            
         </ul>
         <!-- End Sidebar -->
 
