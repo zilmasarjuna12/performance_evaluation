@@ -32,13 +32,22 @@
                 <input type="radio" id="delivery_time" value="1"  name="delivery_time" class="form-check-input">
                 <label class="form-check-label" for="delivery_time">1</label>
             </div>
+          </div>
+          <div class="mt-2">
+            <div class="button-wrap">
+                <label class="new-button" for="fileUpload1">Bukti file</label>
+                <input type="file" id="fileUpload1" name="fileUpload1" class="fileUpload1">
+            </div>
           </div> 
+          <input type="hidden" name="file_delivery" id="file_delivery" value="" >
+
           <div class="mt-2">
             <div class="form-floating">
               <textarea class="form-control" name="delivery_time_comment" placeholder="Leave a comment here" id="delivery_comment" style="height: 100px;"></textarea>
               <label for="floatingTextarea">Komentar</label>
             </div>
           </div>
+          
         </div>
       </li>
       <li class="mb-2 d-flex justify-content-between">
@@ -67,6 +76,13 @@
                 <label class="form-check-label" for="customRadio2">1</label>
             </div>
           </div> 
+          <div class="mt-2">
+            <div class="button-wrap">
+                <label class="new-button" for="fileUpload1">Bukti file</label>
+                <input type="file" id="fileUpload2" name="fileUpload2" class="fileUpload2">
+            </div>
+          </div>
+          <input type="hidden" name="file_execution" id="file_execution" value="" >
           <div class="mt-2">
             <div class="form-floating">
               <textarea class="form-control" name="execution_comment" placeholder="Leave a comment here" id="execution_comment" style="height: 100px;"></textarea>

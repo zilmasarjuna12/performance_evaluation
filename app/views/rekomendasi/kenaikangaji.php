@@ -129,7 +129,7 @@
 
                                     <h5 class="m-0 pb-2">
                                         <a class="text-dark" data-bs-toggle="collapse" href="#upcomingTasks" role="button" aria-expanded="false" aria-controls="upcomingTasks">
-                                            <i class='uil uil-angle-down font-18'></i>Uji Akurasi</span>
+                                            <i class='uil uil-angle-down font-18'></i>Pemodelan (SVM)</span>
                                         </a>
                                     </h5>
 
@@ -174,6 +174,72 @@
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card -->
                                         <div class="card">
+                                            <div class="card-body">
+                                                <table class="table table-centered mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>W1</th>
+                                                            <th>W2</th>
+                                                            <th>W3</th>
+                                                            <th>W4</th>
+                                                            <th>Bias</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><?= $data['w'][0]; ?></td>
+                                                            <td><?= $data['w'][1]; ?></td>
+                                                            <td><?= $data['w'][2]; ?></td>
+                                                            <td><?= $data['w'][3]; ?></td>
+                                                            <td><?= $data['b']; ?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table class="table table-centered mb-0">
+                                                  <thead>
+                                                      <tr>
+                                                          <th>ID</th>
+                                                          <th>Email</th>
+                                                          <th>Nama Lengkap</th>
+                                                          <th>Posisi Pekerjaan</th>
+                                                          <th>Delivery Time</th>
+                                                          <th>Execution</th>
+                                                          <th>Team Work</th>
+                                                          <th>Innovation</th>
+                                                          <th>Naik Gaji</th>
+                                                          <th>Hasil</th>
+                                                      </tr>
+                                                  </thead>
+
+                                              
+                                                  <tbody>
+                                                      <tr class="text-center">
+                                                          <td colspan="9"class="bg-green">Data Testing</td>
+                                                          <td class="bg-red">Hasil</td>
+                                                      </tr>
+                                                    <?php foreach($data['datasets_testing'] as $usr => $index) : ?>
+                                                        <tr>
+                                                            <td><?= $usr+1 ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['email'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['fullname'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['job_position'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['delivery_time'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['execution'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['team_work'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['innovation'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['naik_gaji'] ?></td>
+                                                            <td><?= $data['datasets_testing'][$usr]['hasil'] ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                  </tbody>
+                                                </table>   
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card -->
+                                         <div class="card">
                                             <div class="card-body">
                                                 <table class="table table-centered mb-0">
                                                   <thead>
@@ -233,8 +299,7 @@
                                                 <p class="text-center">Total Testing: <?= $data['count_testing']; ?></p>
                                                 <p class="text-center">Total Jumlah Tepat: <?= $data['count_TP']+$data['count_TN']; ?> </p> 
                                                 <p class="text-center">Total Jumlah Tidak Tepat: <?= $data['count_FP']+$data['count_FN']; ?> </p>
-                                                <p class="text-center">Akurasi: <?= $data['accurasi']; ?> % </p>
-                                                <p class="text-center">Akurasi Error: <?= $data['accurasi_error']; ?> % </p>
+                                                <p class="text-center">Akurasi: (<?= $data['count_TP']+$data['count_TN']; ?> / <?= $data['count_testing']; ?>) x 100 = <?= $data['accurasi']; ?> % </p>
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card -->
                                     </div>

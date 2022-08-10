@@ -9,8 +9,8 @@
 
     public function add($data) {
       $query = "INSERT INTO 
-        penilaian (delivery_time, delivery_time_comment, execution, execution_comment, team_work, team_work_comment, innovation, innovation_comment, created_by, periode_id, status_penilaian)
-        VALUES (:delivery_time, :delivery_time_comment, :execution, :execution_comment, :team_work, :team_work_comment, :innovation, :innovation_comment, :created_by, :periode_id, :status_penilaian)
+        penilaian (delivery_time, delivery_time_comment, execution, execution_comment, team_work, team_work_comment, innovation, innovation_comment, created_by, periode_id, status_penilaian, file_delivery, file_execution)
+        VALUES (:delivery_time, :delivery_time_comment, :execution, :execution_comment, :team_work, :team_work_comment, :innovation, :innovation_comment, :created_by, :periode_id, :status_penilaian, :file_delivery, :file_execution)
       ";
 
       try {
@@ -26,6 +26,9 @@
         $this->db->bind("created_by", $data['created_by']);
         $this->db->bind("periode_id", $data['periode_id']);
         $this->db->bind("status_penilaian", "submitted");
+        $this->db->bind("file_delivery", $data['file_delivery']);
+        $this->db->bind("file_execution", $data['file_execution']);
+
         $this->db->execute();
       } catch (PDOException $e) {
         echo $e->getMessage();
@@ -71,7 +74,7 @@
         on p.created_by = users.id
         left join periodes as per
         on per.id = p.periode_id 
-        WHERE users.role = 'karyawan'
+        WHERE users.role = 'karyawan' AND per.id = :periode_id
       ";
 
       $this->db->query($query);
@@ -159,24 +162,32 @@
       ";
 
       $queryNaikGaji = "INSERT INTO 
-        result_naik_gaji (result)
-        VALUES (:result)
+        result_naik_gaji (result, formula, w1, w2, w3, w4, bias)
+        VALUES (:result, :formula, :w1, :w2, :w3, :w4, :bias)
       ";
 
       $queryClassification = "INSERT INTO
-        result_classification (result)
-        VALUES (:result)
+        result_classification (result, formula)
+        VALUES (:result, :formula)
       ";
 
       try {
         $this->db->root()->beginTransaction();
         $this->db->query($queryNaikGaji);
-        $this->db->bind('result', $data['naik_gaji']);
+        $this->db->bind('result', $data['naik_gaji']['hasil']);
+        $this->db->bind('formula', $data['naik_gaji']['formula']);
+        $this->db->bind('w1', $data['naik_gaji']['weight'][0]);
+        $this->db->bind('w2', $data['naik_gaji']['weight'][1]);
+        $this->db->bind('w3', $data['naik_gaji']['weight'][2]);
+        $this->db->bind('w4', $data['naik_gaji']['weight'][3]);
+        $this->db->bind('bias', $data['naik_gaji']['bias']);
         $this->db->execute();
         $naikGajiId = $this->db->root()->lastInsertId();
 
         $this->db->query($queryClassification);
-        $this->db->bind('result', $data['classification']);
+        $this->db->bind('result', $data['classification']['hasil']);
+        $this->db->bind('formula', $data['classification']['formula']);
+        
         $this->db->execute();
         $classificationId = $this->db->root()->lastInsertId();
 
@@ -276,7 +287,7 @@
     }
  
     public function getDetailResult($id) {
-      $query = 'SELECT *, p.id as penilaian_id, rn.result as naik_gaji, rc.result as classification, per.name as periode_name from penilaian as p
+      $query = 'SELECT *, p.id as penilaian_id, rn.result as naik_gaji, rn.formula as naik_gaji_formula, rc.result as classification, rc.formula as classification_formula, per.name as periode_name from penilaian as p
         left join periodes as per
         on per.id = p.periode_id
         left join result_classification as rc

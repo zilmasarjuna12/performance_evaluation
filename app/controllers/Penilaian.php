@@ -11,6 +11,7 @@ class Penilaian extends Controller {
 
     public function add() {
       Utils::PrivatePage();
+      
       $result = $this->model('Penilaian_model')->add($_POST);
 
       if ($result['count'] > 0) {
@@ -39,6 +40,12 @@ class Penilaian extends Controller {
       }
     }
 
+    public function periode() {
+      $data['periodes'] = $this->model('Periode_model')->getAll();
+
+      $this->view('periode/penilaian', $data);
+    }
+
     public function editWithApprove() {
       Utils::PrivatePage();
       $data = $_POST;
@@ -48,13 +55,15 @@ class Penilaian extends Controller {
 
       $result = $this->model('Penilaian_model')->editWithApprove($data);
 
+      $detail = $this->model('Penilaian_model')->getDetailResult($data['id']);
+
       if ($result['count'] > 0) {
         Flasher::setFlash('berhasil', 'disetuji', 'success', 'Penilaian');
-        header('Location: ' . BASEURL . '/employee/penilaian');
+        header('Location: ' . BASEURL . '/employee/penilaian/' . $detail['periode_id']);
         exit;
       } else {
         Flasher::setFlash('gagal', 'disetuji', 'danger', 'Penilaian');
-        header('Location: ' . BASEURL . '/employee/penilaian');
+        header('Location: ' . BASEURL . '/employee/penilaian/' . $detail['periode_id']);
         exit;
       }
     }
@@ -201,24 +210,25 @@ class Penilaian extends Controller {
       }
 
 
-      // $hasilA = number_format($HA,12);
-      // $hasilB = number_format($HB,12);
-      // $hasilC = number_format($HC,12);
-      // $hasilD = number_format($HD,12);
-      // $hasilE = number_format($HE,12);
+      $hasilA = number_format($HA,12);
+      $hasilB = number_format($HB,12);
+      $hasilC = number_format($HC,12);
+      $hasilD = number_format($HD,12);
+      $hasilE = number_format($HE,12);
 
-      // $gab="<h3>Hasil Analisa</h3>";
-      // $gab.= "<strong>$nk1 => $SHA =$hasilA</strong><br>";
-      // $gab.= "<strong>$nk2 => $SHB =$hasilB</strong><br>";
-      // $gab.= "<strong>$nk3 => $SHC =$hasilC</strong><br>";
-      // $gab.= "<strong>$nk4 => $SHD =$hasilD</strong><br>";
-      // $gab.= "<strong>$nk5 => $SHE =$hasilE</strong><br>";
+      $gab="<h3>Hasil Analisa</h3>";
+      $gab.= "<strong>$nk1 => $SHA =$hasilA</strong><br>";
+      $gab.= "<strong>$nk2 => $SHB =$hasilB</strong><br>";
+      $gab.= "<strong>$nk3 => $SHC =$hasilC</strong><br>";
+      $gab.= "<strong>$nk4 => $SHD =$hasilD</strong><br>";
+      $gab.= "<strong>$nk5 => $SHE =$hasilE</strong><br>";
 
-      // $gab2= "<b>Rekomendasi Bus Anda : $index ($max)<br>";
+      $gab.= "<b>Rekomendasi Evaluasi : $index ($max)<br>";
     
-      // echo $gab;
-      // echo $gab2;
-      return $index;
+      $result['hasil'] = $index;
+      $result['formula']= $gab;
+
+      return $result;
     } 
 
     public function svm($data) {
@@ -245,11 +255,20 @@ class Penilaian extends Controller {
   
       $predictions = $svm->predict([[intval($data['delivery_time']), intval($data['execution']), intval($data['team_work']), intval($data['innovation'])]]);
       // var_dump($predictions);
+      $result["hasil"] = "No";
+      $result["formula"]= $svm->writeFormula(
+        [intval($data['delivery_time']), 
+        intval($data['execution']), 
+        intval($data['team_work']), 
+        intval($data['innovation'])]);
+      $result["weight"] = $svm->getW();
+      $result["bias"] = $svm->getB();
+
       if ($predictions[0] == 1) {
-        return "Yes";
+        $result["hasil"] = "Yes";
       }
       
-      return "No";
+      return $result;
     }
 
     public function report() {

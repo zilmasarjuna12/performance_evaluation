@@ -14,6 +14,24 @@
       return $this->db->resultSet();
     }
 
+    public function getAlltidakNaikGaji() {
+      $query = "SELECT * from dataset_kenaikangaji where dataset_kenaikangaji.naik_gaji='No'";
+
+      $this->db->query($query);
+      $this->db->execute();
+
+      return $this->db->resultSet();
+    }
+
+    public function getAllNaikGaji() {
+      $query = "SELECT * from dataset_kenaikangaji where dataset_kenaikangaji.naik_gaji='Yes'";
+
+      $this->db->query($query);
+      $this->db->execute();
+
+      return $this->db->resultSet();
+    }
+
     public function add($data) {
       $query = "INSERT INTO dataset_kenaikangaji (email, fullname, job_position, delivery_time, execution, team_work, innovation, naik_gaji)
         VALUES(:email, :fullname, :job_position, :delivery_time, :execution, :team_work, :innovation, :naik_gaji)

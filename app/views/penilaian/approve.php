@@ -55,7 +55,11 @@
                 <input type="radio" id="delivery_time" value="1"  name="delivery_time" class="form-check-input">
                 <label class="form-check-label" for="delivery_time">1</label>
             </div>
-          </div> 
+          </div>
+          <div class="mt-2">
+              <label>Bukti</label>
+              <div class="download-delivery"></div>
+          </div>
           <div class="mt-2">
             <div class="form-floating">
               <textarea class="form-control" name="delivery_time_comment" placeholder="Leave a comment here" id="delivery_comment" style="height: 100px;"></textarea>
@@ -90,6 +94,10 @@
                 <label class="form-check-label" for="customRadio2">1</label>
             </div>
           </div> 
+          <div class="mt-2">
+              <label>Bukti</label>
+              <div class="download-execution"></div>
+          </div>
           <div class="mt-2">
             <div class="form-floating">
               <textarea class="form-control" name="execution_comment" placeholder="Leave a comment here" id="execution_comment" style="height: 100px;"></textarea>

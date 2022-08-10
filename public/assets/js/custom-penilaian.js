@@ -18,7 +18,7 @@ $(document).ready(function() {
         $radiosExecution.filter('[value='+data.execution+']').prop('checked', true);
         $radiosTeamWork.filter('[value='+data.team_work+']').prop('checked', true);
         $radiosInnovation.filter('[value='+data.innovation+']').prop('checked', true);
-
+        console.log("sdasd")
         $("#delivery_comment").val(data.delivery_time_comment);
         $("#execution_comment").val(data.execution_comment);
         $("#team_work_comment").val(data.team_work_comment);
@@ -26,10 +26,54 @@ $(document).ready(function() {
         $(".fullname").text(data.created_by.fullname);
         $(".email").text(data.created_by.email);
         $(".job").text(data.created_by.job_name);
+        $(".download-execution").html("<a href='"+window.location.origin+"/mvc/public"+ data.file_execution +"' download>download</a>")
+        $(".download-delivery").html("<a href='"+window.location.origin+"/mvc/public"+ data.file_delivery +"' download>download</a>")
 
         $("#id").val(data.id);
         $('#periode_id').val(data.periode_id);
       }
+    });
+  })
+
+  $('.fileUpload1').on('change', function(val) {
+    var file = $(this)[0].files[0];
+
+    var formData = new FormData();
+    formData.append("file", file);
+
+    $.ajax({
+      url: 'http://localhost/mvc/public/upload/add',
+      method: 'post',
+      success: function(data) {
+        $("#file_delivery").val(data);
+      },
+      async: true,
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      timeout: 60000
+    });
+  })
+
+  $('.fileUpload2').on('change', function(val) {
+    var file = $(this)[0].files[0];
+
+    var formData = new FormData();
+    formData.append("file", file);
+
+    $.ajax({
+      url: 'http://localhost/mvc/public/upload/add',
+      method: 'post',
+      success: function(data) {
+        $("#file_execution").val(data);
+      },
+      async: true,
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      timeout: 60000
     });
   })
 

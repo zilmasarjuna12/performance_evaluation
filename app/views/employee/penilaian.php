@@ -33,7 +33,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Penilaian karyawan</h4>
+                                    <h4 class="page-title">Penilaian karyawan <?= $data['periode']['name']; ?></h4>
                                 </div>
                             </div>
                         </div>     
@@ -91,7 +91,7 @@
                                                 </td>
                                                 <td>
                                                   <?php if($data['users'][$usr]['periode_id'] == ""): ?>
-                                                      <i class="mdi mdi-circle text-danger"></i> Belum dimulai
+                                                      <i class="mdi mdi-circle text-danger"></i> Belum input penilaian
                                                   <?php elseif($data['users'][$usr]['periode_id'] != "" && $data['users'][$usr]['status_penilaian'] == "submitted"): ?>
                                                       <i class="mdi mdi-circle text-warning"></i> Perlu persetujuan leader
                                                   <?php elseif($data['users'][$usr]['periode_id'] != "" && $data['users'][$usr]['status_penilaian'] == "approved"): ?>

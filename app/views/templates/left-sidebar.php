@@ -70,7 +70,7 @@
                 <div class="collapse" id="sidebarPenilaianKaryawan">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="<?= BASEURL; ?>/employee/penilaian">Persutujuan</a>
+                            <a href="<?= BASEURL; ?>/penilaian/periode">Persutujuan</a>
                         </li>
                         <li>
                     </ul>

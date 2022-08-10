@@ -28,7 +28,7 @@ class Svm
         // non-support vectors for space and time efficiency are truncated. To guarantee correct result set this to 0 to do no truncating. If you want to increase efficiency, experiment with setting this little higher, up to maybe 1e-4 or so.
         $alphatol = array_key_exists('alphatol', $options) ? $options['alphatol'] : 1e-7;
         // max number of iterations
-        $maxiter = array_key_exists('maxiter', $options) ? $options['maxiter'] : 10000;
+        $maxiter = array_key_exists('maxiter', $options) ? $options['maxiter'] : 200;
         // how many passes over data with no change before we halt? Increase for more precision.
         $numpasses = array_key_exists('numpasses', $options) ? $options['numpasses'] : 20;
 
@@ -80,7 +80,6 @@ class Svm
 
         while ($passes < $numpasses && $iter < $maxiter) {
             $alphaChanged = 0;
-
             for ($i = 0; $i < $N; $i++) {
                 $Ei = $this->marginOne($data[$i]) - $labels[$i];
 
@@ -223,6 +222,14 @@ class Svm
         return $this->kernel;
     }
 
+    public function getW() {
+        return $this->w;
+    }
+
+    public function getB() {
+        return $this->b;
+    }
+
 
     // inst is an array of length D. Returns margin of given example
     // this is the core prediction function. All others are for convenience mostly
@@ -249,6 +256,20 @@ class Svm
         }
 
         return $f;
+    }
+
+    public function writeFormula($inst) {
+        $gab="<h5>Hasil Analisa SVM</h5>";
+        $as = 0;
+        $c = 0;
+        for ($j = 0; $j < $this->D; $j++) {
+            $gab.= "(". $inst[$j] ." * ". $this->w[$j] .") + ";
+
+            $c += $inst[$j] * $this->w[$j];
+        }
+        $as = $c + $this->b;
+        $gab.= "(". $this->b .") = " . $as;
+        return $gab;
     }
 
     public function predictOne($inst)

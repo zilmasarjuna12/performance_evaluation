@@ -10,13 +10,12 @@
       $this->view('employee/index', $data);
     }
 
-    public function penilaian() {
+    public function penilaian($id) {
       Utils::PrivatePage();
       $data['judul'] = 'Home';
-
-      $data['periode'] = $this->model('Periode_model')->getActive();
+      $data['periode'] = $this->model('Periode_model')->getDetail($id);
       $data['users'] = $this->model('Penilaian_model')->getAllEmployeeAndPenilaian($data['periode']['id']);
-
+      
       $this->view('employee/penilaian', $data);
     }
 

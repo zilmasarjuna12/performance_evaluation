@@ -129,7 +129,7 @@
 
                                     <h5 class="m-0 pb-2">
                                         <a class="text-dark" data-bs-toggle="collapse" href="#upcomingTasks" role="button" aria-expanded="false" aria-controls="upcomingTasks">
-                                            <i class='uil uil-angle-down font-18'></i>Uji Akurasi</span>
+                                            <i class='uil uil-angle-down font-18'></i>Pemodelan (Naive Bayes)</span>
                                         </a>
                                     </h5>
 
@@ -173,6 +173,208 @@
                                                 </table>   
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card -->
+                                        <div class="card">
+                                            <div class="card-body">
+                                              <table class="table table-centered mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Feature</th>
+                                                        <th>Nilai</th>
+                                                        <th>Sangat Baik</th>
+                                                        <th>Baik</th>
+                                                        <th>Cukup</th>
+                                                        <th>Buruk</th>
+                                                        <th>Sangat Buruk</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="text-center">
+                                                        <td colspan="7" class="bg-green">Probability</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Time</td>
+                                                        <td>1</td>
+                                                        <td><?= $data['delivery_time'][0][0]; ?></td>
+                                                        <td><?= $data['delivery_time'][1][0]; ?></td>
+                                                        <td><?= $data['delivery_time'][2][0]; ?></td>
+                                                        <td><?= $data['delivery_time'][3][0]; ?></td>
+                                                        <td><?= $data['delivery_time'][4][0]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Time</td>
+                                                        <td>2</td>
+                                                        <td><?= $data['delivery_time'][0][1]; ?></td>
+                                                        <td><?= $data['delivery_time'][1][1]; ?></td>
+                                                        <td><?= $data['delivery_time'][2][1]; ?></td>
+                                                        <td><?= $data['delivery_time'][3][1]; ?></td>
+                                                        <td><?= $data['delivery_time'][4][1]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Time</td>
+                                                        <td>3</td>
+                                                        <td><?= $data['delivery_time'][0][2]; ?></td>
+                                                        <td><?= $data['delivery_time'][1][2]; ?></td>
+                                                        <td><?= $data['delivery_time'][2][2]; ?></td>
+                                                        <td><?= $data['delivery_time'][3][2]; ?></td>
+                                                        <td><?= $data['delivery_time'][4][2]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Time</td>
+                                                        <td>4</td>
+                                                        <td><?= $data['delivery_time'][0][3]; ?></td>
+                                                        <td><?= $data['delivery_time'][1][3]; ?></td>
+                                                        <td><?= $data['delivery_time'][2][3]; ?></td>
+                                                        <td><?= $data['delivery_time'][3][3]; ?></td>
+                                                        <td><?= $data['delivery_time'][4][3]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Time</td>
+                                                        <td>5</td>
+                                                        <td><?= $data['delivery_time'][0][4]; ?></td>
+                                                        <td><?= $data['delivery_time'][1][4]; ?></td>
+                                                        <td><?= $data['delivery_time'][2][4]; ?></td>
+                                                        <td><?= $data['delivery_time'][3][4]; ?></td>
+                                                        <td><?= $data['delivery_time'][4][4]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Execution</td>
+                                                        <td>1</td>
+                                                        <td><?= $data['execution'][0][0]; ?></td>
+                                                        <td><?= $data['execution'][1][0]; ?></td>
+                                                        <td><?= $data['execution'][2][0]; ?></td>
+                                                        <td><?= $data['execution'][3][0]; ?></td>
+                                                        <td><?= $data['execution'][4][0]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Execution</td>
+                                                        <td>2</td>
+                                                        <td><?= $data['execution'][0][1]; ?></td>
+                                                        <td><?= $data['execution'][1][1]; ?></td>
+                                                        <td><?= $data['execution'][2][1]; ?></td>
+                                                        <td><?= $data['execution'][3][1]; ?></td>
+                                                        <td><?= $data['execution'][4][1]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Execution</td>
+                                                        <td>3</td>
+                                                        <td><?= $data['execution'][0][2]; ?></td>
+                                                        <td><?= $data['execution'][1][2]; ?></td>
+                                                        <td><?= $data['execution'][2][2]; ?></td>
+                                                        <td><?= $data['execution'][3][2]; ?></td>
+                                                        <td><?= $data['execution'][4][2]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Execution</td>
+                                                        <td>4</td>
+                                                        <td><?= $data['execution'][0][3]; ?></td>
+                                                        <td><?= $data['execution'][1][3]; ?></td>
+                                                        <td><?= $data['execution'][2][3]; ?></td>
+                                                        <td><?= $data['execution'][3][3]; ?></td>
+                                                        <td><?= $data['execution'][4][3]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Execution</td>
+                                                        <td>5</td>
+                                                        <td><?= $data['execution'][0][4]; ?></td>
+                                                        <td><?= $data['execution'][1][4]; ?></td>
+                                                        <td><?= $data['execution'][2][4]; ?></td>
+                                                        <td><?= $data['execution'][3][4]; ?></td>
+                                                        <td><?= $data['execution'][4][4]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Team Work</td>
+                                                        <td>1</td>
+                                                        <td><?= $data['team_work'][0][0]; ?></td>
+                                                        <td><?= $data['team_work'][1][0]; ?></td>
+                                                        <td><?= $data['team_work'][2][0]; ?></td>
+                                                        <td><?= $data['team_work'][3][0]; ?></td>
+                                                        <td><?= $data['team_work'][4][0]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Team Work</td>
+                                                        <td>2</td>
+                                                        <td><?= $data['team_work'][0][1]; ?></td>
+                                                        <td><?= $data['team_work'][1][1]; ?></td>
+                                                        <td><?= $data['team_work'][2][1]; ?></td>
+                                                        <td><?= $data['team_work'][3][1]; ?></td>
+                                                        <td><?= $data['team_work'][4][1]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Team Work</td>
+                                                        <td>3</td>
+                                                        <td><?= $data['team_work'][0][2]; ?></td>
+                                                        <td><?= $data['team_work'][1][2]; ?></td>
+                                                        <td><?= $data['team_work'][2][2]; ?></td>
+                                                        <td><?= $data['team_work'][3][2]; ?></td>
+                                                        <td><?= $data['team_work'][4][2]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Team Work</td>
+                                                        <td>4</td>
+                                                        <td><?= $data['team_work'][0][3]; ?></td>
+                                                        <td><?= $data['team_work'][1][3]; ?></td>
+                                                        <td><?= $data['team_work'][2][3]; ?></td>
+                                                        <td><?= $data['team_work'][3][3]; ?></td>
+                                                        <td><?= $data['team_work'][4][3]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Team Work</td>
+                                                        <td>5</td>
+                                                        <td><?= $data['team_work'][0][4]; ?></td>
+                                                        <td><?= $data['team_work'][1][4]; ?></td>
+                                                        <td><?= $data['team_work'][2][4]; ?></td>
+                                                        <td><?= $data['team_work'][3][4]; ?></td>
+                                                        <td><?= $data['team_work'][4][4]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Innovation</td>
+                                                        <td>1</td>
+                                                        <td><?= $data['innovation'][0][0]; ?></td>
+                                                        <td><?= $data['innovation'][1][0]; ?></td>
+                                                        <td><?= $data['innovation'][2][0]; ?></td>
+                                                        <td><?= $data['innovation'][3][0]; ?></td>
+                                                        <td><?= $data['innovation'][4][0]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Innovation</td>
+                                                        <td>2</td>
+                                                        <td><?= $data['innovation'][0][1]; ?></td>
+                                                        <td><?= $data['innovation'][1][1]; ?></td>
+                                                        <td><?= $data['innovation'][2][1]; ?></td>
+                                                        <td><?= $data['innovation'][3][1]; ?></td>
+                                                        <td><?= $data['innovation'][4][1]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Innovation</td>
+                                                        <td>3</td>
+                                                        <td><?= $data['innovation'][0][2]; ?></td>
+                                                        <td><?= $data['innovation'][1][2]; ?></td>
+                                                        <td><?= $data['innovation'][2][2]; ?></td>
+                                                        <td><?= $data['innovation'][3][2]; ?></td>
+                                                        <td><?= $data['innovation'][4][2]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Innovation</td>
+                                                        <td>4</td>
+                                                        <td><?= $data['innovation'][0][3]; ?></td>
+                                                        <td><?= $data['innovation'][1][3]; ?></td>
+                                                        <td><?= $data['innovation'][2][3]; ?></td>
+                                                        <td><?= $data['innovation'][3][3]; ?></td>
+                                                        <td><?= $data['innovation'][4][3]; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Innovation</td>
+                                                        <td>5</td>
+                                                        <td><?= $data['innovation'][0][4]; ?></td>
+                                                        <td><?= $data['innovation'][1][4]; ?></td>
+                                                        <td><?= $data['innovation'][2][4]; ?></td>
+                                                        <td><?= $data['innovation'][3][4]; ?></td>
+                                                        <td><?= $data['innovation'][4][4]; ?></td>
+                                                    </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                        </div>
                                         <div class="card">
                                             <div class="card-body">
                                                 <table class="table table-centered mb-0">
@@ -233,8 +435,7 @@
                                                 <p class="text-center">Total Testing: <?= $data['count_testing']; ?></p>
                                                 <p class="text-center">Total Jumlah Tepat: <?= $data['count_TP']; ?> </p> 
                                                 <p class="text-center">Total Jumlah Tidak Tepat: <?= $data['count_FN']; ?> </p>
-                                                <p class="text-center">Akurasi: <?= $data['accurasi']; ?> % </p>
-                                                <p class="text-center">Akurasi Error: <?= $data['error_accurasi']; ?> % </p>
+                                                <p class="text-center">Akurasi: (<?= $data['count_TP']; ?> / <?= $data['count_testing']; ?>) x 100 = <?= $data['accurasi']; ?> % </p>
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card -->
                                     </div>

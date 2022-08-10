@@ -63,11 +63,11 @@
                                     <div class="card-body">
                                       <div class="row mb-2">
                                           <!-- SignIn modal content -->
-                                          <div id="modal-form-penilaian" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                          <div id="modal-detail-kenaikangaji" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
                                                   
                                                   <div class="modal-content">
-                                                    <?php $this->view('penilaian/approve') ?>
+                                                    <?php $this->view('report/modal_kenaikangaji') ?>
                                                   </div><!-- /.modal-content -->
                                               </div><!-- /.modal-dialog -->
                                           </div><!-- /.modal -->
@@ -84,6 +84,7 @@
                                                   <th>Teamwork</th>
                                                   <th>Innovation</th>
                                                   <th>Keterangan</th>
+                                                  <th>Action</th>
                                               </tr>
                                           </thead>
                                       
@@ -94,7 +95,7 @@
                                                 <td><?= $data['users_penilaian'][$usr]['user']['fullname'] ?></td>
                                                 <td>
                                                   <?php if($data['users_penilaian'][$usr]['penilaian'] == ""): ?>
-                                                      <i class="mdi mdi-circle text-danger"></i> Belum dimulai
+                                                      <i class="mdi mdi-circle text-danger"></i> Belum input penilaian
                                                   <?php elseif($data['users_penilaian'][$usr]['penilaian']['status_penilaian'] == "submitted"): ?>
                                                       <i class="mdi mdi-circle text-warning"></i> Perlu persetujuan leader
                                                   <?php elseif($data['users_penilaian'][$usr]['penilaian']['status_penilaian'] == "approved"): ?>
@@ -113,6 +114,18 @@
                                                       Direkomendasikan tidak naik gaji
                                                     <?php endif ?>
                                                   <? endif ?>
+                                                </td>
+                                                <td>
+
+                                                  <?php if ($data['users_penilaian'][$usr]['penilaian'] != ""): ?>
+                                                      <a 
+                                                          class="btn btn-info btn-sm modalDetailKenaikanGaji" 
+                                                          role="button" 
+                                                          data-bs-toggle="modal" 
+                                                          data-bs-target="#modal-detail-kenaikangaji"
+                                                          data-id="<?= $data['users_penilaian'][$usr]['penilaian']['penilaian_id']; ?>"
+                                                          >Analisa</a>
+                                                  <?php endif ?>
                                                 </td>
                                               </tr>
                                             <?php endforeach; ?>

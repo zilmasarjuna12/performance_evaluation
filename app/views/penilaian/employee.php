@@ -96,7 +96,7 @@
                                                 </td>
                                                 <td>
                                                     <?php if($data['periodes_penilaian'][$usr]['penilaian'] == ""): ?>
-                                                        <i class="mdi mdi-circle text-danger"></i> Belum dimulai
+                                                        <i class="mdi mdi-circle text-danger"></i> Belum input penilaian
                                                     <?php elseif($data['periodes_penilaian'][$usr]['penilaian'] != "" && $data['periodes_penilaian'][$usr]['penilaian']['status_penilaian'] == "submitted"): ?>
                                                         <i class="mdi mdi-circle text-warning"></i> Perlu persetujuan leader
                                                     <?php elseif($data['periodes_penilaian'][$usr]['penilaian'] != "" && $data['periodes_penilaian'][$usr]['penilaian']['status_penilaian'] == "approved"): ?>

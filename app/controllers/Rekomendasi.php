@@ -106,6 +106,30 @@ class Rekomendasi extends Controller {
     header('Location: ' . BASEURL . '/rekomendasi/kenaikangaji');
   }
 
+  public function sa() {
+    $dataset = $data['datasets'] = $this->model('DatasetKenaikanGaji_model')->getAll();;
+
+    $crit = array();
+    $target = array();
+
+    foreach($dataset as $usr => $val) {
+      $itemCrit = array(intval($dataset[$usr]['delivery_time']), intval($dataset[$usr]['execution']), intval($dataset[$usr]['team_work']), intval($dataset[$usr]['innovation']));
+      $itemTarget = -1;
+
+      if ($dataset[$usr]['naik_gaji'] == "Yes") {
+        $itemTarget = 1;
+      }
+
+      array_push($crit, $itemCrit);
+      array_push($target, $itemTarget);
+    }
+    $svm = new Svm();
+    $svm->train($crit, $target);
+
+    // $predictions = $svm->predict([[intval($data['delivery_time']), intval($data['execution']), intval($data['team_work']), intval($data['innovation'])]]);
+    print_r($svm);
+  }
+
   public function upload_csv_evaluasi() {
     // Allowed mime types
     $fileMimes = array(
@@ -177,11 +201,16 @@ class Rekomendasi extends Controller {
     $data['count_FN'] = 0;
     $data['count_testing'] = 0;
     $data['datasets'] = $this->model('DatasetKenaikanGaji_model')->getAll();
+    $data['datasets_tidaknaikgaji'] = $this->model('DatasetKenaikanGaji_model')->getAllTidakNaikGaji();
+    $data['datasets_naikgaji'] = $this->model('DatasetKenaikanGaji_model')->getAllNaikGaji();
+
     $data['jumlah_dataset'] = count($data['datasets']);
     $data['datasets_traning'] = [];
     $data['datasets_testing'] = [];
     $data['accurasi'] = 0;
     $data['accurasi_error'] = 0;
+    $data['w'] = [0, 0, 0, 0];
+    $data['b'] = 0;
 
     if (count($data['datasets']) > 0) {
       $split = array_chunk($data['datasets'], 140);
@@ -208,18 +237,6 @@ class Rekomendasi extends Controller {
         array_push($target, $itemTarget);
       }
 
-      foreach($dataset as $usr => $val) {
-        $itemCrit = array(intval($dataset[$usr]['delivery_time']), intval($dataset[$usr]['execution']), intval($dataset[$usr]['team_work']), intval($dataset[$usr]['innovation']));
-        $itemTarget = -1;
-
-        if ($dataset[$usr]['naik_gaji'] == "Yes") {
-          $itemTarget = 1;
-        }
-
-        array_push($crit, $itemCrit);
-        array_push($target, $itemTarget);
-      }
-
       foreach($data['datasets_testing'] as $usr => $val) {
         $itemPred = array(intval($data['datasets_testing'][$usr]['delivery_time']), intval($data['datasets_testing'][$usr]['execution']), intval($data['datasets_testing'][$usr]['team_work']), intval($data['datasets_testing'][$usr]['innovation']));
 
@@ -229,8 +246,10 @@ class Rekomendasi extends Controller {
       $svm = new Svm();
       $svm->train($crit, $target);
 
+      $data ['w'] = $svm->getW();
+      $data['b'] = $svm->getB();
+
       $predictions = $svm->predict($itemPredict);
-      
 
       foreach($data['datasets_testing'] as $usr => $val) {
         $hasil = "";
@@ -275,6 +294,31 @@ class Rekomendasi extends Controller {
     $data['accurasi'] = 0;
     $data['error_accurasi'] = 0;
 
+    $data['class'] = [0, 0, 0, 0, 0];
+    $data['delivery_time'][0] = [0, 0, 0, 0, 0];
+    $data['delivery_time'][1] = [0, 0, 0, 0, 0];
+    $data['delivery_time'][2] = [0, 0, 0, 0, 0];
+    $data['delivery_time'][3] = [0, 0, 0, 0, 0];
+    $data['delivery_time'][4] = [0, 0, 0, 0, 0];
+
+    $data['execution'][0] = [0, 0, 0, 0, 0];
+    $data['execution'][0] = [0, 0, 0, 0, 0];
+    $data['execution'][0] = [0, 0, 0, 0, 0];
+    $data['execution'][0] = [0, 0, 0, 0, 0];
+    $data['execution'][0] = [0, 0, 0, 0, 0];
+
+    $data['team_work'][0] = [0, 0, 0, 0, 0];
+    $data['team_work'][0] = [0, 0, 0, 0, 0];
+    $data['team_work'][0] = [0, 0, 0, 0, 0];
+    $data['team_work'][0] = [0, 0, 0, 0, 0];
+    $data['team_work'][0] = [0, 0, 0, 0, 0];
+
+    $data['innovation'][0] = [0, 0, 0, 0, 0];
+    $data['innovation'][0] = [0, 0, 0, 0, 0];
+    $data['innovation'][0] = [0, 0, 0, 0, 0];
+    $data['innovation'][0] = [0, 0, 0, 0, 0];
+    $data['innovation'][0] = [0, 0, 0, 0, 0];
+
     foreach($data['datasets_testing'] as $usr => $val) {
       $hasil = $this->bayes($data['datasets_testing'][$usr]);
 
@@ -288,11 +332,46 @@ class Rekomendasi extends Controller {
       $data['datasets_testing'][$usr]['hasil'] = $hasil;
     }
 
+    if (count($data['datasets_traning']) > 0) { 
+      $jumK1 = $this->model('DatasetClassification_model')->getOutTraining('Sangat Baik');
+      $jumK2 = $this->model('DatasetClassification_model')->getOutTraining('Baik');
+      $jumK3 = $this->model('DatasetClassification_model')->getOutTraining('Cukup');
+      $jumK4 = $this->model('DatasetClassification_model')->getOutTraining('Buruk');
+      $jumK5 = $this->model('DatasetClassification_model')->getOutTraining('Sangat Buruk');
+      $totK = $jumK1 + $jumK2 + $jumK3 + $jumK4 + $jumK5;
+
+      $data['delivery_time'][0] = [$this->model('DatasetClassification_model')->getKKTraining('delivery_time', 1,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 2,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 3,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 4,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 5,"Sangat Baik")/$jumK1];
+      $data['delivery_time'][1] = [$this->model('DatasetClassification_model')->getKKTraining('delivery_time', 1,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 2,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 3,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 4,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 5,"Baik")/$jumK2];
+      $data['delivery_time'][2] = [$this->model('DatasetClassification_model')->getKKTraining('delivery_time', 1,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 2,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 3,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 4,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 5,"Cukup")/$jumK3];
+      $data['delivery_time'][3] = [$this->model('DatasetClassification_model')->getKKTraining('delivery_time', 1,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 2,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 3,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 4,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 5,"Buruk")/$jumK4];
+      $data['delivery_time'][4] = [$this->model('DatasetClassification_model')->getKKTraining('delivery_time', 1,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 2,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 3,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 4,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('delivery_time', 5,"Sangat Buruk")/$jumK5];
+
+      $data['execution'][0] = [$this->model('DatasetClassification_model')->getKKTraining('execution', 1,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('execution', 2,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('execution', 3,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('execution', 4,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('execution', 5,"Sangat Baik")/$jumK1];
+      $data['execution'][1] = [$this->model('DatasetClassification_model')->getKKTraining('execution', 1,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('execution', 2,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('execution', 3,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('execution', 4,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('execution', 5,"Baik")/$jumK2];
+      $data['execution'][2] = [$this->model('DatasetClassification_model')->getKKTraining('execution', 1,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('execution', 2,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('execution', 3,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('execution', 4,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('execution', 5,"Cukup")/$jumK3];
+      $data['execution'][3] = [$this->model('DatasetClassification_model')->getKKTraining('execution', 1,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('execution', 2,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('execution', 3,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('execution', 4,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('execution', 5,"Buruk")/$jumK4];
+      $data['execution'][4] = [$this->model('DatasetClassification_model')->getKKTraining('execution', 1,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('execution', 2,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('execution', 3,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('execution', 4,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('execution', 5,"Sangat Buruk")/$jumK5];
+
+      $data['team_work'][0] = [$this->model('DatasetClassification_model')->getKKTraining('team_work', 1,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('team_work', 2,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('team_work', 3,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('team_work', 4,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('team_work', 5,"Sangat Baik")/$jumK1];
+      $data['team_work'][1] = [$this->model('DatasetClassification_model')->getKKTraining('team_work', 1,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('team_work', 2,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('team_work', 3,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('team_work', 4,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('team_work', 5,"Baik")/$jumK2];
+      $data['team_work'][2] = [$this->model('DatasetClassification_model')->getKKTraining('team_work', 1,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('team_work', 2,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('team_work', 3,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('team_work', 4,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('team_work', 5,"Cukup")/$jumK3];
+      $data['team_work'][3] = [$this->model('DatasetClassification_model')->getKKTraining('team_work', 1,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('team_work', 2,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('team_work', 3,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('team_work', 4,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('team_work', 5,"Buruk")/$jumK4];
+      $data['team_work'][4] = [$this->model('DatasetClassification_model')->getKKTraining('team_work', 1,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('team_work', 2,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('team_work', 3,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('team_work', 4,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('team_work', 5,"Sangat Buruk")/$jumK5];
+
+      $data['innovation'][0] = [$this->model('DatasetClassification_model')->getKKTraining('innovation', 1,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('innovation', 2,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('innovation', 3,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('innovation', 4,"Sangat Baik")/$jumK1, $this->model('DatasetClassification_model')->getKKTraining('innovation', 5,"Sangat Baik")/$jumK1];
+      $data['innovation'][1] = [$this->model('DatasetClassification_model')->getKKTraining('innovation', 1,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('innovation', 2,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('innovation', 3,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('innovation', 4,"Baik")/$jumK2, $this->model('DatasetClassification_model')->getKKTraining('innovation', 5,"Baik")/$jumK2];
+      $data['innovation'][2] = [$this->model('DatasetClassification_model')->getKKTraining('innovation', 1,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('innovation', 2,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('innovation', 3,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('innovation', 4,"Cukup")/$jumK3, $this->model('DatasetClassification_model')->getKKTraining('innovation', 5,"Cukup")/$jumK3];
+      $data['innovation'][3] = [$this->model('DatasetClassification_model')->getKKTraining('innovation', 1,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('innovation', 2,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('innovation', 3,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('innovation', 4,"Buruk")/$jumK4, $this->model('DatasetClassification_model')->getKKTraining('innovation', 5,"Buruk")/$jumK4];
+      $data['innovation'][4] = [$this->model('DatasetClassification_model')->getKKTraining('innovation', 1,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('innovation', 2,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('innovation', 3,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('innovation', 4,"Sangat Buruk")/$jumK5, $this->model('DatasetClassification_model')->getKKTraining('innovation', 5,"Sangat Buruk")/$jumK5];
+
+      $data['class'] = [$jumK1/$totK, $jumK2/$totK, $jumK3/$totK, $jumK4/$totK, $jumK5/$totK];
+    }
 
     if ($data['count_testing'] > 0) {
       $data['accurasi'] = ($data['count_TP']/$data['count_testing']) * 100;
       $data['error_accurasi'] = ($data['count_FN']/$data['count_testing']) * 100;
     }
+
     $this->view("rekomendasi/evaluasi", $data);
   }
 
@@ -328,36 +407,6 @@ class Rekomendasi extends Controller {
     $jumG4C=$this->model('DatasetClassification_model')->getKKTraining('innovation', intval($data['innovation']),"Cukup");
     $jumG4D=$this->model('DatasetClassification_model')->getKKTraining('innovation', intval($data['innovation']),"Buruk");
     $jumG4E=$this->model('DatasetClassification_model')->getKKTraining('innovation', intval($data['innovation']),"Sangat Buruk");
-
-    // if($jumG1A==0 || $jumG2A==0 || $jumG3A==0 || $jumG4A==0){
-    //   $jumK1+=1;
-    //   $totK+=1;
-    //   $jumG1A+=1;$jumG2A+=1;$jumG3A+=1;$jumG4A+=1;
-    // }
-
-    // if($jumG1B==0 || $jumG2B==0 || $jumG3B==0 || $jumG4B==0 ){
-    //   $jumK1+=1;
-    //   $totK+=1;
-    //   $jumG1B+=1;$jumG2B+=1;$jumG3B+=1;$jumG4B+=1;
-    // }
-
-    // if($jumG1C==0 || $jumG2C==0 || $jumG3C==0 || $jumG4C==0 ){
-    //   $jumK1+=1;
-    //   $totK+=1;
-    //   $jumG1C+=1;$jumG2C+=1;$jumG3C+=1;$jumG4C+=1;
-    // }
-
-    // if($jumG1D==0 || $jumG2D==0 || $jumG3D==0 || $jumG4D==0 ){
-    //   $jumK1+=1;
-    //   $totK+=1;
-    //   $jumG1D+=1;$jumG2D+=1;$jumG3D+=1;$jumG4D+=1;
-    // }
-
-    // if($jumG1E==0 || $jumG2E==0 || $jumG3E==0 || $jumG4E==0 ){
-    //   $jumK1+=1;
-    //   $totK+=1;
-    //   $jumG1E+=1;$jumG2E+=1;$jumG3E+=1;$jumG4E+=1;
-    // }
 
     $HA=($jumK1/$totK)*($jumG1A/$jumK1)*($jumG2A/$jumK1)*($jumG3A/$jumK1)*($jumG4A/$jumK1);
     $HB=($jumK2/$totK)*($jumG1B/$jumK2)*($jumG2B/$jumK2)*($jumG3B/$jumK2)*($jumG4B/$jumK2);
